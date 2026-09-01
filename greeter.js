@@ -4,12 +4,17 @@ class Greeter {
   }
 
   greet (name) {
-    const greetings = { en: 'Hello', es: 'Hola', fr: 'Bonjour' }
+    const greetings = { en: 'Hello', es: 'Hola', fr: 'Bonjour', de: 'Hallo' }
     return `${greetings[this.locale] || greetings.en}, ${name}!`
   }
 
   farewell (name) {
-    const farewells = { en: 'Goodbye', es: 'Adiós', fr: 'Au revoir' }
+    const farewells = {
+      en: 'Goodbye',
+      es: 'Adiós',
+      fr: 'Au revoir',
+      de: 'Auf Wiedersehen'
+    }
     return `${farewells[this.locale] || farewells.en}, ${name}!`
   }
 }
