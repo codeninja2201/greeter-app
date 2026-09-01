@@ -1,0 +1,43 @@
+name: Sync upstream
+
+on:
+  workflow_dispatch: {}
+  schedule:
+    - cron: "0 13 * * 1"
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout fork
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Add upstream remote
+        run: git remote add upstream https://github.com/fadonic/greeter-app.git
+
+      - name: Configure git identity
+        run: |
+          git config user.name "upstream-sync-bot"
+          git config user.email "actions@github.com"
+
+      - name: Run sync script
+        id: sync
+        run: bash scripts/sync-upstream.sh
+
+      - name: Push sync branch
+        if: steps.sync.outputs.SYNC_BRANCH != ''
+        run: git push origin HEAD:${{ steps.sync.outputs.SYNC_BRANCH }} --force
+
+      - name: Open pull request
+        if: steps.sync.outputs.SYNC_BRANCH != ''
+        uses: peter-evans/create-pull-request@v6
+        with:
+          branch: ${{ steps.sync.outputs.SYNC_BRANCH }}
+          base: main
+          title: "Upstream sync (${{ steps.sync.outputs.MERGE_STATUS }})"
+          body: |
+            Automated upstream sync.
+            Status: ${{ steps.sync.outputs.MERGE_STATUS }}
+          labels: upstream-sync
