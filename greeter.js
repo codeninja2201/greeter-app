@@ -1,5 +1,6 @@
-function greet(name) {
-  return "Hello, " + name + "! Welcome to LegalCo.";
+function greet (name, title) {
+  const prefix = title ? title + ' ' : ''
+  return 'Hello, ' + prefix + name + '! Welcome to LegalCo.'
 }
 
-module.exports = { greet };
+module.exports = { greet }
