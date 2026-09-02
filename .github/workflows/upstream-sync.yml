@@ -15,16 +15,6 @@ jobs:
           fetch-depth: 0
           token: ${{ secrets.SYNC_PATH }}
 
-      - name: Debug secret presence
-        run: |
-          if [ -z "$SECRET" ]; then
-            echo "SYNC_PATH is EMPTY or not found"
-          else
-            echo "SYNC_PATH has a value, length: ${#SECRET}"
-          fi
-        env:
-          SECRET: ${{ secrets.SYNC_PATH }}
-
       - name: Add upstream remote
         run: git remote add upstream https://github.com/fadonic/greeter-app.git
 
@@ -43,12 +33,12 @@ jobs:
 
       - name: Open pull request
         if: steps.sync.outputs.SYNC_BRANCH != ''
-        uses: peter-evans/create-pull-request@v6
-        with:
-          branch: ${{ steps.sync.outputs.SYNC_BRANCH }}
-          base: main
-          title: "Upstream sync (${{ steps.sync.outputs.MERGE_STATUS }})"
-          body: |
-            Automated upstream sync.
-            Status: ${{ steps.sync.outputs.MERGE_STATUS }}
-          labels: upstream-sync
+        env:
+          GH_TOKEN: ${{ secrets.SYNC_PATH }}
+        run: |
+          gh pr create \
+            --base main \
+            --head "${{ steps.sync.outputs.SYNC_BRANCH }}" \
+            --title "Upstream sync (${{ steps.sync.outputs.MERGE_STATUS }})" \
+            --body "Automated upstream sync. Status: ${{ steps.sync.outputs.MERGE_STATUS }}" \
+            --label upstream-sync
