@@ -15,6 +15,16 @@ jobs:
           fetch-depth: 0
           token: ${{ secrets.SYNC_PATH }}
 
+      - name: Debug secret presence
+        run: |
+          if [ -z "$SECRET" ]; then
+            echo "SYNC_PATH is EMPTY or not found"
+          else
+            echo "SYNC_PATH has a value, length: ${#SECRET}"
+          fi
+        env:
+          SECRET: ${{ secrets.SYNC_PATH }}
+
       - name: Add upstream remote
         run: git remote add upstream https://github.com/fadonic/greeter-app.git
 
