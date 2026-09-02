@@ -39,8 +39,10 @@ if git merge "$UPSTREAM_REMOTE/$UPSTREAM_BRANCH" --no-edit -q; then
   echo "MERGE_STATUS=clean" >> "${GITHUB_OUTPUT:-/dev/stdout}"
   echo "SYNC_BRANCH=$SYNC_BRANCH" >> "${GITHUB_OUTPUT:-/dev/stdout}"
 else
-  echo "==> Merge produced conflicts. Leaving them for manual resolution."
+  echo "==> Merge produced conflicts. Committing conflict markers as-is for human review."
   git status --short | grep '^UU' || true
+  git add -A
+  git commit -q -m "WIP: unresolved merge conflict with upstream ($UPSTREAM_HEAD) - needs manual resolution"
   echo "MERGE_STATUS=conflict" >> "${GITHUB_OUTPUT:-/dev/stdout}"
   echo "SYNC_BRANCH=$SYNC_BRANCH" >> "${GITHUB_OUTPUT:-/dev/stdout}"
 fi
