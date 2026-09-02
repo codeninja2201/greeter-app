@@ -40,5 +40,4 @@ jobs:
             --base main \
             --head "${{ steps.sync.outputs.SYNC_BRANCH }}" \
             --title "Upstream sync (${{ steps.sync.outputs.MERGE_STATUS }})" \
-            --body "Automated upstream sync. Status: ${{ steps.sync.outputs.MERGE_STATUS }}" \
-            --label upstream-sync
+            --body "Automated upstream sync. Status: ${{ steps.sync.outputs.MERGE_STATUS }}"
