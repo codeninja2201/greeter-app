@@ -15,6 +15,7 @@ class Greeter {
     this.locale = locale
   }
 
+<<<<<<< HEAD
   greet (name, clientId) {
     const greeting = greetings[this.locale] || greetings.en
     const clientName = clientId ? lookupClientName(clientId) : null
@@ -29,6 +30,21 @@ class Greeter {
     const farewell = farewells[this.locale] || farewells.en
     logGreeting(name)
     return `${farewell}, ${name}!`
+=======
+  greet (name) {
+    const greetings = { en: 'Hello', es: 'Hola', fr: 'Bonjour', de: 'Hallo' }
+    return `${greetings[this.locale] || greetings.en}, ${name}!`
+  }
+
+  farewell (name) {
+    const farewells = {
+      en: 'Goodbye',
+      es: 'Adiós',
+      fr: 'Au revoir',
+      de: 'Auf Wiedersehen'
+    }
+    return `${farewells[this.locale] || farewells.en}, ${name}!`
+>>>>>>> upstream/main
   }
 }
 
